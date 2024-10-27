@@ -1,20 +1,20 @@
 import React from 'react';
-import { useDispatch } from 'react-redux';
-import { setTheme } from '../redux/themeSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import { toggleTheme } from '../redux/themeSlice';
 
-const ThemeSelector = () => {
+function ThemeSelector() {
   const dispatch = useDispatch();
+  const darkMode = useSelector((state) => state.theme.darkMode);
 
-  const handleThemeChange = (event) => {
-    dispatch(setTheme(event.target.value));
+  const handleToggle = () => {
+    dispatch(toggleTheme());
   };
 
   return (
-    <select onChange={handleThemeChange}>
-      <option value="light">Yorug'</option>
-      <option value="dark">Qorong'u</option>
-    </select>
+    <button onClick={handleToggle} className="px-2 py-1 border rounded-md">
+      {darkMode ? 'Light Mode' : 'Dark Mode'}
+    </button>
   );
-};
+}
 
 export default ThemeSelector;

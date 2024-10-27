@@ -1,88 +1,56 @@
 import React, { useState } from 'react';
-import Header from '../components/Header'
-import { useDispatch, useSelector } from 'react-redux';
-import { addToCart, removeFromCart } from '../redux/cartSlice'; // to'g'ri yo'lni o'rnating
 
 const Cart = () => {
-  const dispatch = useDispatch();
-  const cartItems = useSelector((state) => state.cart.items);
-  const [product, setProduct] = useState({ id: '', name: '', price: '' });
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setProduct({ ...product, [name]: value });
-  };
+  const [items, setItems] = useState([]);
+  const [itemName, setItemName] = useState('');
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (product.id && product.name && product.price) {
-      dispatch(addToCart(product));
-      setProduct({ id: '', name: '', price: '' });
-    }
+    if (itemName.trim() === '') return; 
+    setItems([...items, itemName]); 
+    setItemName('');
+  };
+
+  const handleRemove = (index) => {
+    const newItems = items.filter((_, i) => i !== index); 
+    setItems(newItems);
   };
 
   return (
-
-    <div className="p-4">
-            <Header/>
-      <h2 className="text-2xl">Cart</h2>
-      <form onSubmit={handleSubmit} className="border p-4 mb-4">
-        <h2 className="text-lg font-bold">Add Product to Cart</h2>
-        <div className="mb-2">
-          <label>ID:</label>
-          <input
-            type="text"
-            name="id"
-            value={product.id}
-            onChange={handleChange}
-            required
-            className="border p-1"
-          />
-        </div>
-        <div className="mb-2">
-          <label>Name:</label>
-          <input
-            type="text"
-            name="name"
-            value={product.name}
-            onChange={handleChange}
-            required
-            className="border p-1"
-          />
-        </div>
-        <div className="mb-2">
-          <label>Price:</label>
-          <input
-            type="number"
-            name="price"
-            value={product.price}
-            onChange={handleChange}
-            required
-            className="border p-1"
-          />
-        </div>
-        <button type="submit" className="bg-blue-500 text-white p-2">
-          Add to Cart
+    <div className="container mx-auto p-8 bg-gray-50 rounded-lg shadow-lg">
+      <h1 className="text-4xl font-bold mb-6 text-center text-blue-700">CART</h1>
+      
+      <form onSubmit={handleSubmit} className="flex justify-center mb-6">
+        <input
+          type="text"
+          value={itemName}
+          onChange={(e) => setItemName(e.target.value)}
+          className="border border-gray-300 p-4 rounded-l-md shadow-md w-2/5 focus:outline-none focus:ring-2 focus:ring-blue-400 transition duration-300"
+          placeholder="Mahsulot nomini kiriting"
+        />
+        <button type="submit" className="bg-blue-600 text-white p-4 rounded-r-md shadow-md hover:bg-blue-700 transition duration-300">
+          ADD
         </button>
       </form>
 
-      {cartItems.length === 0 ? (
-        <p>Your cart is empty.</p>
-      ) : (
-        <ul>
-          {cartItems.map((item) => (
-            <li key={item.id} className="flex justify-between mb-2">
-              <span>{item.name} - {item.price} USD</span>
-              <button 
-                onClick={() => dispatch(removeFromCart(item.id))} 
-                className="text-red-500"
-              >
-                Remove
+      <p className="text-xl font-semibold mb-4 text-center">
+        Cartda {items.length} ta mahsulot mavjud.
+      </p>
+
+      <ul className="list-disc pl-5 space-y-2">
+        {items.length > 0 ? (
+          items.map((item, index) => (
+            <li key={index} className="flex justify-between items-center bg-white p-3 mb-2 rounded-md shadow-md hover:shadow-lg transition duration-300">
+              <span className="text-gray-800 font-medium">{item}</span>
+              <button onClick={() => handleRemove(index)} className="bg-red-600 text-white p-2 rounded-md hover:bg-red-700 transition duration-300">
+                <REMOVE></REMOVE>
               </button>
             </li>
-          ))}
-        </ul>
-      )}
+          ))
+        ) : (
+          <li className="text-gray-500 text-center">Cart bo'sh.</li>
+        )}
+      </ul>
     </div>
   );
 };

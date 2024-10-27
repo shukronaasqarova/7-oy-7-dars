@@ -1,10 +1,10 @@
 import React from 'react';
 import { Routes, Route } from 'react-router-dom';
 import Home from './pages/Home';
-import CartPage from './pages/CartPage';
+import Cart from './pages/Cart';
 import LanguageSelector from './components/LanguageSelector';
 import ThemeSelector from './components/ThemeSelector';
-import ProductPage from './components/ProductCard';
+// import ProductPage from './components/ProductCard';
 
 const App = () => {
   return (
@@ -13,8 +13,7 @@ const App = () => {
       <ThemeSelector />
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/cart" element={<CartPage />} />
-        <Route path='/productPage' element={<ProductPage></ProductPage>}></Route>
+        <Route path="/cart" element={<Cart />} />
       </Routes>
     </div>
   );
